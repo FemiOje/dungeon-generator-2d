@@ -1,4 +1,3 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -82,7 +81,7 @@ public class DungeonGenerator : MonoBehaviour
                         }
                         else
                         {
-                            randomRoom = 0;
+                            randomRoom = Random.Range(0, rooms.Length);
                         }
                     }
 
