@@ -37,17 +37,18 @@ public class DungeonGenerator : MonoBehaviour
     public int startPos = 0;
     public Rule[] rooms;
     public Vector2 offset;
+    public GameObject playerPrefab;
 
     List<Cell> board;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         MazeGenerator();
     }
 
     void GenerateDungeon()
     {
+        bool playerSpawned = false;
 
         for (int i = 0; i < size.x; i++)
         {
@@ -85,15 +86,19 @@ public class DungeonGenerator : MonoBehaviour
                         }
                     }
 
-
                     var newRoom = Instantiate(rooms[randomRoom].room, new Vector2(i * offset.x, -j * offset.y), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
                     newRoom.UpdateRoom(currentCell.status);
                     newRoom.name += " " + i + "-" + j;
-
+                    
+                    if (!playerSpawned && playerPrefab != null)
+                    {
+                        Vector3 playerPosition = new Vector3(i * offset.x, -j * offset.y, 0);
+                        Instantiate(playerPrefab, playerPosition, Quaternion.identity);
+                        playerSpawned = true;
+                    }
                 }
             }
         }
-
     }
 
     void MazeGenerator()
