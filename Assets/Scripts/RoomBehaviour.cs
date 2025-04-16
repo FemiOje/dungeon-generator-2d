@@ -9,10 +9,6 @@ public class RoomBehaviour : MonoBehaviour
 
     [SerializeField] bool[] testStatus;
 
-    void Start() {
-        UpdateRoom(testStatus);
-    }
-
     public void UpdateRoom(bool[] status)
     {
         for (int i = 0; i < status.Length; i++)

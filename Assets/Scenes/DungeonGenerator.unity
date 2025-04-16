@@ -30910,7 +30910,7 @@ GameObject:
   - component: {fileID: 832977184}
   - component: {fileID: 832977185}
   m_Layer: 0
-  m_Name: Generator
+  m_Name: DungeonGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30943,21 +30943,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf4ba52656bcee348b834ad0f195076c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 10, y: 10}
+  size: {x: 6, y: 4}
   startPos: 0
   rooms:
   - room: {fileID: 4148836832452500418, guid: e37f85a6e5419994487fa45076822bd5, type: 3}
     minPosition: {x: 0, y: 0}
     maxPosition: {x: 0, y: 0}
-    obligatory: 0
+    obligatory: 1
   - room: {fileID: 5739492382926760649, guid: 4c9d26df890e3ae43b95edc49751c8f0, type: 3}
     minPosition: {x: 0, y: 0}
     maxPosition: {x: 0, y: 0}
-    obligatory: 0
+    obligatory: 1
   - room: {fileID: 9050065984825535758, guid: 6f538998c71b8c747be57552eeead9e3, type: 3}
     minPosition: {x: 0, y: 0}
     maxPosition: {x: 0, y: 0}
-    obligatory: 0
+    obligatory: 1
   offset: {x: 9, y: 9}
   playerPrefab: {fileID: 9184202965869704257, guid: b5babdb32f0834246a5969c4d2c50857, type: 3}
 --- !u!1001 &1136753512
