@@ -14,11 +14,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 513835489738106468, guid: e37f85a6e5419994487fa45076822bd5, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1255458963965135914, guid: e37f85a6e5419994487fa45076822bd5, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2414020417695886847, guid: e37f85a6e5419994487fa45076822bd5, type: 3}
       propertyPath: m_Tiles.Array.size
@@ -440,6 +440,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3080846834249736929, guid: e37f85a6e5419994487fa45076822bd5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3113565973061307430, guid: e37f85a6e5419994487fa45076822bd5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -486,7 +490,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5743477477018595711, guid: e37f85a6e5419994487fa45076822bd5, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8025296434925577094, guid: e37f85a6e5419994487fa45076822bd5, type: 3}
       propertyPath: testStatus.Array.data[0]
@@ -502,7 +506,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8214200930703568486, guid: e37f85a6e5419994487fa45076822bd5, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8905556087371795003, guid: e37f85a6e5419994487fa45076822bd5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
