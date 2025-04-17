@@ -21,8 +21,9 @@ public class CameraController : MonoBehaviour
     private Vector3 targetPosition;
     private float targetSize;
     private Camera mainCamera;
+    private bool isInitialized = false;
     
-    void Start()
+    void Awake()
     {
         mainCamera = GetComponent<Camera>();
         if (mainCamera == null)
@@ -31,11 +32,26 @@ public class CameraController : MonoBehaviour
             enabled = false;
             return;
         }
+        
+        // Set initial camera position and size without player reference
+        targetPosition = new Vector3(0, 0, transform.position.z);
+        mainCamera.orthographicSize = fullViewSize;
+        transform.position = targetPosition;
+    }
 
-        player = FindObjectOfType<PlayerController>().transform;
+    // Public method to initialize camera after dungeon generation
+    public void Initialize()
+    {
+        player = FindObjectOfType<PlayerController>()?.transform;
+        if (player == null)
+        {
+            Debug.LogError("No PlayerController found in the scene!");
+            return;
+        }
+
         isFollowingPlayer = false;
         
-        // Ensure we start with a proper view of the entire scene
+        // Update camera position based on dungeon center
         if (dungeonCenter != null)
         {
             targetPosition = new Vector3(dungeonCenter.position.x, dungeonCenter.position.y, transform.position.z);
@@ -50,12 +66,15 @@ public class CameraController : MonoBehaviour
         targetSize = fullViewSize;
         mainCamera.orthographicSize = fullViewSize;
         
-        // Ensure camera is positioned correctly from the start
+        // Ensure camera is positioned correctly
         transform.position = targetPosition;
+        isInitialized = true;
     }
 
     void Update()
     {
+        if (!isInitialized) return;
+
         // Toggle camera mode on key press
         if (Input.GetKeyDown(toggleKey))
         {
@@ -76,7 +95,6 @@ public class CameraController : MonoBehaviour
             }
             else
             {
-                // If no dungeon center is set, position camera at origin
                 targetPosition = new Vector3(0, 0, transform.position.z);
             }
             targetSize = fullViewSize;
@@ -95,6 +113,7 @@ public class CameraController : MonoBehaviour
     // Public method to manually set camera mode
     public void SetCameraMode(bool followPlayer)
     {
+        if (!isInitialized) return;
         isFollowingPlayer = followPlayer;
     }
     

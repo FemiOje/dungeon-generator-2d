@@ -1,9 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI; // Add UI namespace
+using TMPro; // Add TextMeshPro namespace
 
 public class DungeonGenerator : MonoBehaviour
 {
+    [Header("UI References")]
+    public TMP_InputField startPositionInput;
+    public TMP_InputField sizeXInput;
+    public TMP_InputField sizeYInput;
+    public Button startButton;
+    public GameObject uiPanel;
+
+    [Header("References")]
+    public CameraController cameraController;
+
     public class Cell
     {
         public bool visited = false;
@@ -40,10 +52,67 @@ public class DungeonGenerator : MonoBehaviour
     public GameObject playerPrefab;
 
     List<Cell> board;
+    private bool hasGenerated = false;
 
-    void Awake()
+    void Start()
     {
-        MazeGenerator();
+        // Add listener to the start button
+        if (startButton != null)
+        {
+            startButton.onClick.AddListener(OnStartButtonClick);
+        }
+        
+        // Initialize input fields with default values
+        if (sizeXInput != null) sizeXInput.text = size.x.ToString();
+        if (sizeYInput != null) sizeYInput.text = size.y.ToString();
+        if (startPositionInput != null) startPositionInput.text = startPos.ToString();
+    }
+
+    void OnStartButtonClick()
+    {
+        // Parse user input
+        if (int.TryParse(sizeXInput.text, out int x) && 
+            int.TryParse(sizeYInput.text, out int y) && 
+            int.TryParse(startPositionInput.text, out int start))
+        {
+            // Validate input
+            if (x <= 0 || y <= 0)
+            {
+                Debug.LogError("Size values must be greater than 0!");
+                return;
+            }
+
+            size = new Vector2Int(x, y);
+            startPos = Mathf.Clamp(start, 0, x * y - 1);
+
+            // Clear existing dungeon if it exists
+            if (hasGenerated)
+            {
+                foreach (Transform child in transform)
+                {
+                    Destroy(child.gameObject);
+                }
+            }
+
+            // Hide UI panel
+            if (uiPanel != null) uiPanel.SetActive(false);
+
+            // Generate new dungeon
+            MazeGenerator();
+            hasGenerated = true;
+
+            // Initialize camera after dungeon generation
+            if (cameraController != null)
+            {
+                float maxSize = Mathf.Max(size.x, size.y) * offset.x;
+                cameraController.UpdateDungeonBounds(transform, maxSize);
+                cameraController.Initialize();
+            }
+        }
+        else
+        {
+            Debug.LogError("Invalid input values!");
+        }
     }
 
     void GenerateDungeon()
