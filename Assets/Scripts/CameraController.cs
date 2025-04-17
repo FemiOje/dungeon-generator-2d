@@ -4,23 +4,66 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    /// <summary>
+    /// Camera settings
+    /// </summary>
     [Header("Camera Settings")]
     public float smoothSpeed = 5f;
+    
+    /// <summary>
+    /// Zoom speed.
+    /// </summary>
     public float zoomSpeed = 2f;
+
+    /// <summary>
+    /// Key with which to toggle camera views
+    /// </summary>
     public KeyCode toggleKey = KeyCode.Tab;
     
     [Header("References")]
     private Transform player;
+
+    /// <summary>
+    /// Center transform of the dungeon
+    /// </summary>
     public Transform dungeonCenter;
+
+    /// <summary>
+    /// Size of dungeon(default 10.0f)
+    /// </summary>
     public float dungeonSize = 10f;
     
     [Header("Camera Modes")]
     public float fullViewSize = 10f;
-    public float playerViewSize = 5f;    
+
+    /// <summary>
+    /// Player view size (default 5.0f)
+    /// </summary>
+    public float playerViewSize = 5f;
+    
+    /// <summary>
+    /// Sets whether the camera is following the player
+    /// </summary>
     private bool isFollowingPlayer = false;
+
+    /// <summary>
+    /// Position to which the camera should move
+    /// </summary>
     private Vector3 targetPosition;
+
+    /// <summary>
+    /// Adjusts to enable player see appropriate elements according to camera view
+    /// </summary>
     private float targetSize;
+
+    /// <summary>
+    /// Reference to the main camera
+    /// </summary>
     private Camera mainCamera;
+
+    /// <summary>
+    /// Sets whether the camera is initialized
+    /// </summary>
     private bool isInitialized = false;
     
     void Awake()
@@ -35,12 +78,17 @@ public class CameraController : MonoBehaviour
         
         // Set initial camera position and size without player reference
         targetPosition = new Vector3(0, 0, transform.position.z);
+        // Start with a larger initial size to prevent the view being too small
+        fullViewSize = 15f;
         mainCamera.orthographicSize = fullViewSize;
         transform.position = targetPosition;
     }
 
-    // Public method to initialize camera after dungeon generation
-    public void Initialize()
+    /// <summary>
+    /// Initializes camera after dungeon generation
+    /// </summary>
+    /// <param name="centerPosition">Vector3 that represents the center point of the dungeon</param>
+    public void InitializeCamera(Vector3 centerPosition)
     {
         player = FindObjectOfType<PlayerController>()?.transform;
         if (player == null)
@@ -51,22 +99,14 @@ public class CameraController : MonoBehaviour
 
         isFollowingPlayer = false;
         
-        // Update camera position based on dungeon center
-        if (dungeonCenter != null)
-        {
-            targetPosition = new Vector3(dungeonCenter.position.x, dungeonCenter.position.y, transform.position.z);
-        }
-        else
-        {
-            targetPosition = new Vector3(0, 0, transform.position.z);
-        }
+        // Set initial position to the provided center
+        targetPosition = new Vector3(centerPosition.x, centerPosition.y, transform.position.z);
         
-        // Dynamically calculate full view size based on dungeon size
-        fullViewSize = dungeonSize * 0.5f;
+        // Ensure the camera size is large enough to show the entire dungeon
         targetSize = fullViewSize;
         mainCamera.orthographicSize = fullViewSize;
         
-        // Ensure camera is positioned correctly
+        // Immediately position camera at the center
         transform.position = targetPosition;
         isInitialized = true;
     }
@@ -89,39 +129,42 @@ public class CameraController : MonoBehaviour
         }
         else
         {
-            if (dungeonCenter != null)
-            {
-                targetPosition = new Vector3(dungeonCenter.position.x, dungeonCenter.position.y, transform.position.z);
-            }
-            else
-            {
-                targetPosition = new Vector3(0, 0, transform.position.z);
-            }
+            // Use the last known center position when not following player
             targetSize = fullViewSize;
         }
         
         // Smoothly move camera to target position
         transform.position = Vector3.Lerp(transform.position, targetPosition, smoothSpeed * Time.deltaTime);
         
-        // Smoothly adjust camera size (orthographic size for 2D)
-        if (mainCamera.orthographic)
-        {
-            mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetSize, smoothSpeed * Time.deltaTime);
-        }
+        // Smoothly adjust camera size
+        mainCamera.orthographicSize = Mathf.Lerp(mainCamera.orthographicSize, targetSize, smoothSpeed * Time.deltaTime);
     }
-    
-    // Public method to manually set camera mode
+
+    /// <summary>
+    /// Toggles between follow player view and overhead view
+    /// </summary>
+    /// <param name="followPlayer">Sets whether the camera should follow the player</param>
     public void SetCameraMode(bool followPlayer)
     {
         if (!isInitialized) return;
         isFollowingPlayer = followPlayer;
     }
     
-    // Public method to update dungeon center and size
+    /// <summary>
+    /// Updates dungeon center and szie
+    /// </summary>
+    /// <param name="center">Dungeon center transform</param>
+    /// <param name="size">Dungeon size</param>
     public void UpdateDungeonBounds(Transform center, float size)
     {
         dungeonCenter = center;
         dungeonSize = size;
-        fullViewSize = size * 0.5f; // Adjust full view size based on dungeon size
+        // Ensure the full view size is large enough to show the entire dungeon
+        fullViewSize = size;
+        // Update current target size if we're in full view mode
+        if (!isFollowingPlayer)
+        {
+            targetSize = fullViewSize;
+        }
     }
 }

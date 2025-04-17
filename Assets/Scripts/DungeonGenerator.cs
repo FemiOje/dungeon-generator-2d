@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; // Add UI namespace
-using TMPro; // Add TextMeshPro namespace
+using UnityEngine.UI;
+using TMPro;
 
 public class DungeonGenerator : MonoBehaviour
 {
@@ -104,9 +104,20 @@ public class DungeonGenerator : MonoBehaviour
             // Initialize camera after dungeon generation
             if (cameraController != null)
             {
-                float maxSize = Mathf.Max(size.x, size.y) * offset.x;
+                // Calculate the center of the dungeon
+                Vector3 dungeonCenter = new Vector3(
+                    (size.x - 1) * offset.x * 0.5f,
+                    -(size.y - 1) * offset.y * 0.5f,
+                    0
+                );
+
+                // Calculate the size needed to view the entire dungeon
+                float maxSize = Mathf.Max(size.x * offset.x, size.y * offset.y);
+                maxSize = maxSize * 0.7f;
+                
+                // Update camera with calculated values
                 cameraController.UpdateDungeonBounds(transform, maxSize);
-                cameraController.Initialize();
+                cameraController.InitializeCamera(dungeonCenter);
             }
         }
         else
