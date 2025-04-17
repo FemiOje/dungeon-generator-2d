@@ -38,6 +38,7 @@ public class RoomBehaviour : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("Wall trigger entered.");
         if (isEndRoom && !hasTriggeredEnd && collision.CompareTag("Player"))
         {
             hasTriggeredEnd = true;

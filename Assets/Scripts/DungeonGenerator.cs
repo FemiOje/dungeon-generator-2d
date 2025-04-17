@@ -62,7 +62,6 @@ public class DungeonGenerator : MonoBehaviour
         {
             startButton.onClick.AddListener(OnStartButtonClick);
         }
-        
         // Initialize input fields with default values
         if (sizeXInput != null) sizeXInput.text = size.x.ToString();
         if (sizeYInput != null) sizeYInput.text = size.y.ToString();
@@ -136,7 +135,36 @@ public class DungeonGenerator : MonoBehaviour
     void GenerateDungeon()
     {
         bool playerSpawned = false;
+        int endRoomX = -1;
+        int endRoomY = -1;
+        float maxDistance = 0f;
 
+        // First pass: Find the furthest room from start
+        for (int i = 0; i < size.x; i++)
+        {
+            for (int j = 0; j < size.y; j++)
+            {
+                Cell currentCell = board[(i + j * size.x)];
+                if (currentCell.visited)
+                {
+                    // Calculate distance from start position
+                    int startX = startPos % size.x;
+                    int startY = startPos / size.x;
+                    float distance = Mathf.Sqrt(Mathf.Pow(i - startX, 2) + Mathf.Pow(j - startY, 2));
+                    
+                    if (distance > maxDistance)
+                    {
+                        maxDistance = distance;
+                        endRoomX = i;
+                        endRoomY = j;
+                    }
+                }
+            }
+        }
+
+        Debug.Log($"End room calculated at position: ({endRoomX}, {endRoomY}) with distance: {maxDistance}");
+
+        // Second pass: Create rooms and set end room
         for (int i = 0; i < size.x; i++)
         {
             for (int j = 0; j < size.y; j++)
@@ -176,6 +204,13 @@ public class DungeonGenerator : MonoBehaviour
                     var newRoom = Instantiate(rooms[randomRoom].room, new Vector2(i * offset.x, -j * offset.y), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
                     newRoom.UpdateRoom(currentCell.status);
                     newRoom.name += " " + i + "-" + j;
+
+                    // Set this room as the end room if it matches the calculated end room position
+                    if (i == endRoomX && j == endRoomY)
+                    {
+                        newRoom.isEndRoom = true;
+                        Debug.Log($"Setting end room at: {newRoom.name}");
+                    }
                     
                     if (!playerSpawned && playerPrefab != null)
                     {
