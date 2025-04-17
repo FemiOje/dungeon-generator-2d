@@ -19,6 +19,16 @@ public class PlayerController : MonoBehaviour
     {
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
+
+        // Flip sprite upside down when moving up, normal otherwise
+        if (movement.y > 0)
+        {
+            spriteRenderer.flipY = true;
+        }
+        else
+        {
+            spriteRenderer.flipY = false;
+        }
     }
 
     void FixedUpdate()

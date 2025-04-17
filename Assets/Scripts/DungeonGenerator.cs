@@ -15,6 +15,7 @@ public class DungeonGenerator : MonoBehaviour
 
     [Header("References")]
     public CameraController cameraController;
+    public UIManager uiManager;
 
     public class Cell
     {
@@ -118,6 +119,12 @@ public class DungeonGenerator : MonoBehaviour
                 // Update camera with calculated values
                 cameraController.UpdateDungeonBounds(transform, maxSize);
                 cameraController.InitializeCamera(dungeonCenter);
+            }
+
+            // Show controls after dungeon generation
+            if (uiManager != null)
+            {
+                uiManager.ShowControls();
             }
         }
         else
