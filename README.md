@@ -24,4 +24,12 @@
         <a href="https://assetstore.unity.com/packages/audio/music/fantasy-music-package-270899">https://assetstore.unity.com/packages/audio/music/fantasy-music-package-270899</a>
     </td>
   </tr>
+
+  <tr>
+    <td>UI (Start/win screen)</td>
+    <td>Roguelike Characters | KenneyNL</td>
+    <td>
+        <a href="https://kenney.nl/assets/roguelike-characters">https://kenney.nl/assets/roguelike-characters</a>
+    </td>
+  </tr>
 </table>
