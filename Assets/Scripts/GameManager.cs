@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject endGamePanel;
     public TextMeshProUGUI endGameText;
     public Button restartButton;
+    public Button quitButton;
     public GameObject particleEffect;
 
     [Header("References")]
@@ -29,7 +30,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Start()
+    private void Start()
     {
         if (endGamePanel != null)
         {
@@ -39,6 +40,11 @@ public class GameManager : MonoBehaviour
         if (restartButton != null)
         {
             restartButton.onClick.AddListener(RestartGame);
+        }
+
+        if (quitButton != null)
+        {
+            quitButton.onClick.AddListener(QuitGame);
         }
     }
 
@@ -92,11 +98,19 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // Reset player position if it exists
         var player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
             Destroy(player);
         }
+    }
+
+    public void QuitGame()
+    {
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
     }
 } 

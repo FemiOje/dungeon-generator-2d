@@ -132,7 +132,95 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
-    void GenerateDungeon()
+    void MazeGenerator()
+    {
+        board = new List<Cell>();
+
+        for (int i = 0; i < size.x; i++)
+        {
+            for (int j = 0; j < size.y; j++)
+            {
+                board.Add(new Cell());
+            }
+        }
+
+        int currentCell = startPos;
+
+        Stack<int> path = new Stack<int>();
+
+        int k = 0;
+
+        while (k<1000)
+        {
+            k++;
+
+            board[currentCell].visited = true;
+
+            if(currentCell == board.Count - 1)
+            {
+                break;
+            }
+
+            //Check the cell's neighbors
+            List<int> neighbors = CheckNeighbors(currentCell);
+
+            if (neighbors.Count == 0)
+            {
+                if (path.Count == 0)
+                {
+                    break;
+                }
+                else
+                {
+                    currentCell = path.Pop();
+                }
+            }
+            else
+            {
+                path.Push(currentCell);
+
+                int newCell = neighbors[Random.Range(0, neighbors.Count)];
+
+                if (newCell > currentCell)
+                {
+                    //down or right
+                    if (newCell - 1 == currentCell)
+                    {
+                        board[currentCell].status[2] = true;
+                        currentCell = newCell;
+                        board[currentCell].status[3] = true;
+                    }
+                    else
+                    {
+                        board[currentCell].status[1] = true;
+                        currentCell = newCell;
+                        board[currentCell].status[0] = true;
+                    }
+                }
+                else
+                {
+                    //up or left
+                    if (newCell + 1 == currentCell)
+                    {
+                        board[currentCell].status[3] = true;
+                        currentCell = newCell;
+                        board[currentCell].status[2] = true;
+                    }
+                    else
+                    {
+                        board[currentCell].status[0] = true;
+                        currentCell = newCell;
+                        board[currentCell].status[1] = true;
+                    }
+                }
+
+            }
+
+        }
+        GenerateDungeon();
+    }
+
+    public void GenerateDungeon()
     {
         bool playerSpawned = false;
         int endRoomX = -1;
@@ -221,94 +309,6 @@ public class DungeonGenerator : MonoBehaviour
                 }
             }
         }
-    }
-
-    void MazeGenerator()
-    {
-        board = new List<Cell>();
-
-        for (int i = 0; i < size.x; i++)
-        {
-            for (int j = 0; j < size.y; j++)
-            {
-                board.Add(new Cell());
-            }
-        }
-
-        int currentCell = startPos;
-
-        Stack<int> path = new Stack<int>();
-
-        int k = 0;
-
-        while (k<1000)
-        {
-            k++;
-
-            board[currentCell].visited = true;
-
-            if(currentCell == board.Count - 1)
-            {
-                break;
-            }
-
-            //Check the cell's neighbors
-            List<int> neighbors = CheckNeighbors(currentCell);
-
-            if (neighbors.Count == 0)
-            {
-                if (path.Count == 0)
-                {
-                    break;
-                }
-                else
-                {
-                    currentCell = path.Pop();
-                }
-            }
-            else
-            {
-                path.Push(currentCell);
-
-                int newCell = neighbors[Random.Range(0, neighbors.Count)];
-
-                if (newCell > currentCell)
-                {
-                    //down or right
-                    if (newCell - 1 == currentCell)
-                    {
-                        board[currentCell].status[2] = true;
-                        currentCell = newCell;
-                        board[currentCell].status[3] = true;
-                    }
-                    else
-                    {
-                        board[currentCell].status[1] = true;
-                        currentCell = newCell;
-                        board[currentCell].status[0] = true;
-                    }
-                }
-                else
-                {
-                    //up or left
-                    if (newCell + 1 == currentCell)
-                    {
-                        board[currentCell].status[3] = true;
-                        currentCell = newCell;
-                        board[currentCell].status[2] = true;
-                    }
-                    else
-                    {
-                        board[currentCell].status[0] = true;
-                        currentCell = newCell;
-                        board[currentCell].status[1] = true;
-                    }
-                }
-
-            }
-
-        }
-        GenerateDungeon();
     }
 
     List<int> CheckNeighbors(int cell)
