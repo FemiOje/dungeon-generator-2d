@@ -5,16 +5,9 @@ using UnityEngine;
 public class RoomBehaviour : MonoBehaviour
 {
     public GameObject[] walls; // 0 - Up, 1 - Down, 2 - Right, 3 - Left
-    public GameObject[] doors;
+    public GameObject[] doors; // 0 - Up, 1 - Down, 2 - Right, 3 - Left
     public bool isEndRoom = false;
     private bool hasTriggeredEnd = false;
-
-    // [SerializeField] bool[] testStatus;
-
-    void Start()
-    {
-        // UpdateRoom(testStatus);
-    }
 
     public void UpdateRoom(bool[] status)
     {
