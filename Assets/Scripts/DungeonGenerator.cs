@@ -4,34 +4,98 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// Generates a procedural dungeon using a maze generation algorithm.
+/// Controls the creation of rooms, placement of walls and doors, and player spawning.
+/// </summary>
 public class DungeonGenerator : MonoBehaviour
 {
     [Header("UI References")]
+    /// <summary>
+    /// Input field for the starting position of the maze generation.
+    /// </summary>
     public TMP_InputField startPositionInput;
+    
+    /// <summary>
+    /// Input field for the width of the dungeon.
+    /// </summary>
     public TMP_InputField sizeXInput;
+    
+    /// <summary>
+    /// Input field for the height of the dungeon.
+    /// </summary>
     public TMP_InputField sizeYInput;
+    
+    /// <summary>
+    /// Button to start the dungeon generation process.
+    /// </summary>
     public Button startButton;
+    
+    /// <summary>
+    /// Panel containing the UI elements for dungeon generation.
+    /// </summary>
     public GameObject uiPanel;
 
     [Header("References")]
+    /// <summary>
+    /// Reference to the camera controller component.
+    /// </summary>
     public CameraController cameraController;
+    
+    /// <summary>
+    /// Reference to the UI manager component.
+    /// </summary>
     public UIManager uiManager;
 
+    /// <summary>
+    /// Represents a single cell in the dungeon grid.
+    /// </summary>
     public class Cell
     {
+        /// <summary>
+        /// Indicates whether this cell has been visited during maze generation.
+        /// </summary>
         public bool visited = false;
+        
+        /// <summary>
+        /// Array indicating which walls are open (true = open, false = closed).
+        /// Index 0: Up, 1: Down, 2: Right, 3: Left.
+        /// </summary>
         public bool[] status = new bool[4];
     }
 
+    /// <summary>
+    /// Defines a rule for room placement in the dungeon.
+    /// </summary>
     [System.Serializable]
     public class Rule
     {
+        /// <summary>
+        /// The room prefab to be placed.
+        /// </summary>
         public GameObject room;
+        
+        /// <summary>
+        /// Minimum position where this room can be placed.
+        /// </summary>
         public Vector2Int minPosition;
+        
+        /// <summary>
+        /// Maximum position where this room can be placed.
+        /// </summary>
         public Vector2Int maxPosition;
 
+        /// <summary>
+        /// Whether this room must be placed if the position conditions are met.
+        /// </summary>
         public bool obligatory;
 
+        /// <summary>
+        /// Calculates the probability of spawning this room at the given position.
+        /// </summary>
+        /// <param name="x">X coordinate of the position</param>
+        /// <param name="y">Y coordinate of the position</param>
+        /// <returns>0: Cannot spawn, 1: Can spawn, 2: Must spawn</returns>
         public int ProbabilityOfSpawning(int x, int y)
         {
             // 0 - cannot spawn 1 - can spawn 2 - HAS to spawn
@@ -43,18 +107,46 @@ public class DungeonGenerator : MonoBehaviour
 
             return 0;
         }
-
     }
 
+    /// <summary>
+    /// Size of the dungeon grid (width, height).
+    /// </summary>
     public Vector2Int size;
+    
+    /// <summary>
+    /// Starting position for maze generation.
+    /// </summary>
     public int startPos = 0;
+    
+    /// <summary>
+    /// Array of room placement rules.
+    /// </summary>
     public Rule[] rooms;
+    
+    /// <summary>
+    /// Offset between adjacent rooms.
+    /// </summary>
     public Vector2 offset;
+    
+    /// <summary>
+    /// Prefab for the player character.
+    /// </summary>
     public GameObject playerPrefab;
 
+    /// <summary>
+    /// List of cells in the dungeon grid.
+    /// </summary>
     List<Cell> board;
+    
+    /// <summary>
+    /// Indicates whether a dungeon has been generated.
+    /// </summary>
     private bool hasGenerated = false;
 
+    /// <summary>
+    /// Initializes the dungeon generator and sets up UI elements.
+    /// </summary>
     void Start()
     {
         // Add listener to the start button
@@ -68,6 +160,9 @@ public class DungeonGenerator : MonoBehaviour
         if (startPositionInput != null) startPositionInput.text = startPos.ToString();
     }
 
+    /// <summary>
+    /// Handles the start button click event, validating input and starting dungeon generation.
+    /// </summary>
     void OnStartButtonClick()
     {
         // Parse user input
@@ -132,6 +227,9 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Generates a maze using a depth-first search algorithm.
+    /// </summary>
     void MazeGenerator()
     {
         board = new List<Cell>();
@@ -213,13 +311,15 @@ public class DungeonGenerator : MonoBehaviour
                         board[currentCell].status[1] = true;
                     }
                 }
-
             }
-
         }
         GenerateDungeon();
     }
 
+    /// <summary>
+    /// Creates the physical dungeon based on the generated maze.
+    /// Places rooms, sets up walls and doors, and spawns the player.
+    /// </summary>
     public void GenerateDungeon()
     {
         bool playerSpawned = false;
@@ -311,6 +411,11 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Checks for unvisited neighboring cells in the maze grid.
+    /// </summary>
+    /// <param name="cell">Index of the current cell</param>
+    /// <returns>List of indices of unvisited neighboring cells</returns>
     List<int> CheckNeighbors(int cell)
     {
         List<int> neighbors = new List<int>();

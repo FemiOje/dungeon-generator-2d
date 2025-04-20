@@ -2,16 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controls the main camera's behavior, including following the player, zooming, and switching between views.
+/// Provides smooth camera movement and automatic positioning based on dungeon size.
+/// </summary>
 public class CameraController : MonoBehaviour
 {
     /// <summary>
     /// Camera settings
     /// </summary>
     [Header("Camera Settings")]
+    /// <summary>
+    /// Speed at which the camera smoothly moves to its target position.
+    /// </summary>
     public float smoothSpeed = 5f;
     
     /// <summary>
-    /// Zoom speed.
+    /// Speed at which the camera zooms in and out.
     /// </summary>
     public float zoomSpeed = 2f;
 
@@ -21,6 +28,9 @@ public class CameraController : MonoBehaviour
     public KeyCode toggleKey = KeyCode.Tab;
     
     [Header("References")]
+    /// <summary>
+    /// Reference to the player's transform for following.
+    /// </summary>
     private Transform player;
 
     /// <summary>
@@ -34,10 +44,13 @@ public class CameraController : MonoBehaviour
     public float dungeonSize = 10f;
     
     [Header("Camera Modes")]
+    /// <summary>
+    /// Orthographic size when viewing the entire dungeon.
+    /// </summary>
     public float fullViewSize = 10f;
 
     /// <summary>
-    /// Player view size (default 5.0f)
+    /// Orthographic size when following the player (default 5.0f)
     /// </summary>
     public float playerViewSize = 5f;
     
@@ -66,6 +79,9 @@ public class CameraController : MonoBehaviour
     /// </summary>
     private bool isInitialized = false;
     
+    /// <summary>
+    /// Initializes the camera component and sets default values.
+    /// </summary>
     void Awake()
     {
         mainCamera = GetComponent<Camera>();
@@ -111,6 +127,10 @@ public class CameraController : MonoBehaviour
         isInitialized = true;
     }
 
+    /// <summary>
+    /// Updates camera position and size based on current mode and player position.
+    /// Called once per frame.
+    /// </summary>
     void Update()
     {
         if (!isInitialized) return;
@@ -151,7 +171,7 @@ public class CameraController : MonoBehaviour
     }
     
     /// <summary>
-    /// Updates dungeon center and szie
+    /// Updates dungeon center and size
     /// </summary>
     /// <param name="center">Dungeon center transform</param>
     /// <param name="size">Dungeon size</param>
