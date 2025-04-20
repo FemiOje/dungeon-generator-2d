@@ -173,7 +173,7 @@ public class DungeonGenerator : MonoBehaviour
             // Validate input
             if (x <= 0 || y <= 0)
             {
-                Debug.LogError("Size values must be greater than 0!");
+                // Debug.LogError("Size values must be greater than 0!");
                 return;
             }
 
@@ -223,7 +223,7 @@ public class DungeonGenerator : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Invalid input values!");
+            // Debug.LogError("Invalid input values!");
         }
     }
 
@@ -350,7 +350,7 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
 
-        Debug.Log($"End room calculated at position: ({endRoomX}, {endRoomY}) with distance: {maxDistance}");
+        // Debug.Log($"End room calculated at position: ({endRoomX}, {endRoomY}) with distance: {maxDistance}");
 
         // Second pass: Create rooms and set end room
         for (int i = 0; i < size.x; i++)
@@ -390,15 +390,15 @@ public class DungeonGenerator : MonoBehaviour
                     }
 
                     var newRoom = Instantiate(rooms[randomRoom].room, new Vector2(i * offset.x, -j * offset.y), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
-                    newRoom.UpdateRoom(currentCell.status);
                     newRoom.name += " " + i + "-" + j;
 
                     // Set this room as the end room if it matches the calculated end room position
                     if (i == endRoomX && j == endRoomY)
                     {
                         newRoom.isEndRoom = true;
-                        Debug.Log($"Setting end room at: {newRoom.name}");
+                        // Debug.Log($"Setting end room at: {newRoom.name}");
                     }
+                    newRoom.UpdateRoom(currentCell.status);
                     
                     if (!playerSpawned && playerPrefab != null)
                     {

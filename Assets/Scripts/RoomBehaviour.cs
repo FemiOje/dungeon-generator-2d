@@ -29,6 +29,17 @@ public class RoomBehaviour : MonoBehaviour
     private bool hasTriggeredEnd = false;
 
     /// <summary>
+    /// Visual marker to indicate this is the end room.
+    /// </summary>
+    [Header("End Room Visuals")]
+    public GameObject endRoomMarker;
+    
+    /// <summary>
+    /// Color to tint the end room marker.
+    /// </summary>
+    public Color endRoomColor = Color.yellow;
+
+    /// <summary>
     /// Updates the room's walls and doors based on the provided status array.
     /// </summary>
     /// <param name="status">Boolean array indicating which walls should be replaced with doors (true = door, false = wall)</param>
@@ -50,6 +61,23 @@ public class RoomBehaviour : MonoBehaviour
                 }
             }
         }
+
+        // Update end room visual if this is the end room
+        if (isEndRoom && endRoomMarker != null)
+        {
+            endRoomMarker.SetActive(true);
+            
+            // Apply color tint to the marker
+            SpriteRenderer markerRenderer = endRoomMarker.GetComponent<SpriteRenderer>();
+            if (markerRenderer != null)
+            {
+                markerRenderer.color = endRoomColor;
+            }
+        }
+        else if (endRoomMarker != null)
+        {
+            endRoomMarker.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -59,11 +87,11 @@ public class RoomBehaviour : MonoBehaviour
     /// <param name="collision">The collider that entered the trigger</param>
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Wall trigger entered.");
+        // Debug.Log("Wall trigger entered.");
         if (isEndRoom && !hasTriggeredEnd && collision.CompareTag("Player"))
         {
             hasTriggeredEnd = true;
-            Debug.Log("Player reached end room!");
+            // Debug.Log("Player reached end room!");
             
             // Trigger end game event
             if (GameManager.Instance != null)
@@ -72,7 +100,7 @@ public class RoomBehaviour : MonoBehaviour
             }
             else
             {
-                Debug.LogError("GameManager instance not found!");
+                // Debug.LogError("GameManager instance not found!");
             }
         }
     }

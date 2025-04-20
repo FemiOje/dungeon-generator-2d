@@ -87,7 +87,7 @@ public class CameraController : MonoBehaviour
         mainCamera = GetComponent<Camera>();
         if (mainCamera == null)
         {
-            Debug.LogError("CameraController requires a Camera component!");
+            // Debug.LogError("CameraController requires a Camera component!");
             enabled = false;
             return;
         }
@@ -109,7 +109,7 @@ public class CameraController : MonoBehaviour
         player = FindObjectOfType<PlayerController>()?.transform;
         if (player == null)
         {
-            Debug.LogError("No PlayerController found in the scene!");
+            // Debug.LogError("No PlayerController found in the scene!");
             return;
         }
 
